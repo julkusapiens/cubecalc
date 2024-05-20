@@ -1,30 +1,17 @@
+import {Cube} from "./cube.js";
+
 /**
  * This class represents a 3-cube in cube calculus.
  */
-export class Cube3 {
+export class Cube3 extends Cube {
     /**
-     * Constructs a new cube.
-     * Only 0 (negated variable) and 1 (plain variable) are valid values.
-     * Up to two parameters may be null to show their absence from the product term.
-     * @param x first variable of the cube
-     * @param y second variable of the cube
-     * @param z third variable of the cube
+     * Constructs a new 3-cube.
+     * @param x {null|number} first variable of the cube
+     * @param y {null|number} second variable of the cube
+     * @param z {null|number} third variable of the cube
      */
     constructor(x, y, z) {
-        this.x = this.#normalize(x);
-        this.y = this.#normalize(y);
-        this.z = this.#normalize(z);
-    }
-
-    #normalize(v) {
-        switch (v) {
-            case 0:
-                return 0
-            case 1:
-                return 1
-            default:
-                return null;
-        }
+        super(x, y, z);
     }
 
     /**
@@ -33,9 +20,9 @@ export class Cube3 {
      * @returns {string} rgb color string
      */
     getColor() {
-        const nullCount = [this.x, this.y, this.z].filter(v => v === null).length;
-        const zeroCount = [this.x, this.y, this.z].filter(v => v === 0).length;
-        const oneCount = [this.x, this.y, this.z].filter(v => v === 1).length;
+        const nullCount = this.cube.filter(v => v === null).length;
+        const zeroCount = this.cube.filter(v => v === 0).length;
+        const oneCount = this.cube.filter(v => v === 1).length;
 
         const red = Math.round(oneCount / 3 * 255);
         const blue = Math.round(zeroCount / 3 * 255);
@@ -55,23 +42,23 @@ export class Cube3 {
 
     /**
      * Returns the position of the cube in a 3-dimensional environment.
-     * @param environmentSize size of the 3-dimensional environment
+     * @param environmentSize {number} size of the 3-dimensional environment
      * @returns {(number|number)[]} x y and z position
      */
     get3DPosition(environmentSize) {
         const size = environmentSize / 2;
         return [
-            this.x === null ? 0 : (this.x === 0 ? -size : size),
-            this.y === null ? 0 : (this.y === 0 ? -size : size),
-            this.z === null ? 0 : (this.z === 0 ? -size : size)
+            this.cube[0] === null ? 0 : (this.cube[0] === 0 ? -size : size),
+            this.cube[1] === null ? 0 : (this.cube[1] === 0 ? -size : size),
+            this.cube[2] === null ? 0 : (this.cube[2] === 0 ? -size : size)
         ];
     }
 
     /**
      * Returns a canvas of the string representation of the cube.
      * It is used in a 3-dimensional environment.
-     * @param environmentSize size of the 3-dimensional environment
-     * @param fontStyle string like '100px monospace'
+     * @param environmentSize {number} size of the 3-dimensional environment
+     * @param fontStyle {string} string like '100px monospace'
      * @returns {HTMLCanvasElement} canvas of the string representation of the cube
      */
     toCanvas(environmentSize, fontStyle) {
@@ -94,10 +81,6 @@ export class Cube3 {
         textContext.fillText(textRepresentation, 0 ,170);
 
         return textCanvas;
-    }
-
-    toString() {
-        return `(${this.x === null ? '-' : this.x},${this.y === null ? '-' : this.y},${this.z === null ? '-' : this.z})`;
     }
 }
 
@@ -139,4 +122,7 @@ export const TRIPLES = [
         new Cube3(null,null,0),
         new Cube3(null,null,1)
     ],
+    [
+        new Cube3(null,null,null)
+    ]
 ];

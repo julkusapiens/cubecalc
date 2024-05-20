@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {Cube3} from "./cube3.js";
 
 /**
  * This class wraps a three.js cube mesh and adds functionality for labels.
@@ -34,8 +35,13 @@ export class CubeMesh {
         scene.add(this.#cube);
     }
 
+    /**
+     *
+     * @param cubeTriple {Cube3}
+     */
     addLabel(cubeTriple) {
         if (!this.#labels.hasOwnProperty(cubeTriple)) {
+            console.log(cubeTriple.toCanvas(cubeTriple, this.#labelFontStyle));
             const textTexture = new THREE.CanvasTexture(cubeTriple.toCanvas(cubeTriple, this.#labelFontStyle));
             const spriteMaterial = new THREE.SpriteMaterial({ map: textTexture });
             const sprite = new THREE.Sprite(spriteMaterial);
@@ -46,7 +52,11 @@ export class CubeMesh {
         }
     }
 
-    removeLabel(cubeTriple, scene) {
+    /**
+     *
+     * @param cubeTriple {Cube3}
+     */
+    removeLabel(cubeTriple) {
         if (this.#labels.hasOwnProperty(cubeTriple)) {
             const sprite = this.#cube.getObjectsByProperty('uuid', this.#labels[cubeTriple])[0];
             sprite.material.dispose();

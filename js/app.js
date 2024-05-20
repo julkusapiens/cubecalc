@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {Cube} from "./cube.js";
 import {Cube3, TRIPLES} from "./cube3.js";
 import {CubeMesh} from "./cubeMesh.js";
+import {Formula, Atom, And, Or, Not} from "./booleanLogic/formula.js";
+import {FormulaParser} from "./booleanLogic/formulaParser.js";
 
 'use strict';
 
@@ -53,3 +56,32 @@ render();
 cube.addLabel(TRIPLES[0][1]);
 cube.addLabel(TRIPLES[1][0]);
 cube.removeLabel(TRIPLES[0][1], scene);
+
+let c = new Cube(1,0,null);
+let a1 = new Cube(1,null,1);
+let b1 = new Cube(null,1,1);
+let a2 = new Cube(0,null,0);
+let b2 = new Cube(null,null,0);
+let a3 = new Cube(0,null,1);
+let b3 = new Cube(null,null,0);
+console.log(c.getCoveredCubes());
+console.log(c.covers(new Cube(0,0,0)));
+console.log(c.covers(new Cube(1,0,1)));
+console.log("***********************************");
+console.log(a1.intersect(b1));
+console.log(a2.intersect(b2));
+console.log(a3.intersect(b3));
+
+console.log("***********************************");
+
+let formula = new And(new Atom('x'), new Or(new Atom('y'), new Not(new Atom('z'))));
+let assignment = { 'x': true, 'y': false, 'z': true };
+console.log(formula.toString());
+console.log(formula.evaluate(assignment));
+console.log(formula.collectAtoms());
+console.log(formula.getDNFProductTerms());
+
+let parser = new FormulaParser("x and y and not z");
+let f = parser.parse();
+console.log(f.toString());
+console.log(f.getDNFProductTerms());
