@@ -68,10 +68,10 @@ export class Formula {
         if (this.isAtomic() && this.getRoot() !== '') {
             return [this.getRoot()];
         }
-        return [
+        return Array.from(new Set([
             ...(this.getLeft() ? this.getLeft().collectAtoms() : []),
             ...(this.getRight() ? this.getRight().collectAtoms() : [])
-        ];
+        ]));
     }
 
     /**
@@ -101,20 +101,10 @@ export class Formula {
 
 
     /**
-     * @returns {Array<Formula>}
+     * @returns {Array<Object>}
      */
-    getDNFProductTerms() {
-        const productTerms = [];
-
-        generateAssignments(this.collectAtoms()).reduce((dnf, assignment) => {
-            if (this.evaluate(assignment)) {
-                const term = this.productTermFromAssignment(assignment);
-                productTerms.push(term);
-                return dnf ? new Or(dnf, term) : term;
-            }
-        }, null);
-
-        return productTerms;
+    getAllTrueAssignments() {
+        return generateAssignments(this.collectAtoms()).filter(a => this.evaluate(a));
     }
 
     /**

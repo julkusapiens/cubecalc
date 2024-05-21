@@ -23,6 +23,16 @@ export class Cube {
     }
 
     /**
+     * Constructs a cube from a given assignment.
+     * ex. {'x': true, 'y': false, 'z': undefined} returns (1, 0, -)
+     * @param assignment {Object} assignment to construct the cube from
+     * @returns {Cube} cube from given assignment
+     */
+    static fromAssignment(assignment) {
+        return new Cube(...Object.values(assignment).map(v => v === true ? 1 : v === false ? 0 : null));
+    }
+
+    /**
      * Returns the resulting cube after component-wise addition with the given cube.
      * @param otherCube {Cube} cube to be added
      * @returns {Cube} resulting cube after component-wise addition
@@ -44,7 +54,10 @@ export class Cube {
      * @returns {boolean} true if the given cube is covered by this cube
      */
     covers(otherCube) {
-        return Array.from(this.getCoveredCubes().values()).some(cube => cube.equals(otherCube));
+        for (let i = 0; i < Math.min(this.cube.length, otherCube.cube.length); i++) {
+            if (this.cube[i] !== null && this.cube[i] !== otherCube.cube[i]) return false;
+        }
+        return true;
     }
 
     /**
@@ -96,6 +109,10 @@ export class Cube {
         return intersection.includes(undefined) ? undefined : new Cube(...intersection);
     }
 
+    getLength() {
+        return this.cube.length;
+    }
+
     toString() {
         return `(${this.cube.map(value => value === null ? '-' : value).join(',')})`;
     }
@@ -103,5 +120,31 @@ export class Cube {
     equals(otherCube) {
         return this.cube.length === otherCube.cube.length
             && this.cube.every((value, index) => value === otherCube.cube[index]);
+    }
+
+    hasComplementaryDigitWith(otherCube) {
+        return this.cube.some((digit, i) =>
+            (digit === 1 && otherCube.cube[i] === 0) ||
+            (digit === 0 && otherCube.cube[i] === 1));
+    }
+
+    hasConsensusWith(otherCube) {
+        let differences = this.cube.reduce((count, digit, i) => {
+            return count + ((digit !== otherCube.cube[i] && digit !== null && otherCube.cube[i] !== null) ? 1 : 0);
+        }, 0);
+        return differences <= 1;
+    }
+
+    getConsensusWith(otherCube) {
+        let consensus = this.cube.map((digit, i) => {
+            if (digit === otherCube.cube[i]) {
+                return digit;
+            } else if (digit !== otherCube.cube[i] && digit !== null && otherCube.cube[i] !== null) {
+                return null;
+            } else {
+                return digit ?? otherCube.cube[i];
+            }
+        });
+        return new Cube(...consensus);
     }
 }

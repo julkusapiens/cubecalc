@@ -15,6 +15,33 @@ export class Cube3 extends Cube {
     }
 
     /**
+     * Constructs a 3-cube from a given assignment.
+     * @param assignment {Object} assignment to construct the cube from
+     * @returns {null|Cube3} 3-cube from given assignment
+     */
+    static fromAssignment(assignment) {
+        const assignmentValues = Object.values(assignment);
+        switch (assignmentValues.length) {
+            case 3:
+                return new Cube3(...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+            case 2:
+                return new Cube3(null, ...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+            case 1:
+                return new Cube3(null, null, ...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+            default:
+                return null;
+        }
+    }
+
+    getConsensusWith(otherCube) {
+        const consensusCube = super.getConsensusWith(otherCube);
+        if (!consensusCube.getLength() === 3) {
+            throw new Error('Consensus must match my size (3).');
+        }
+        return new Cube3(...consensusCube.cube);
+    }
+
+    /**
      * Returns a color of the cube based on the structure of the variable term.
      * More 1 = more red, more 0 = more blue.
      * @returns {string} rgb color string

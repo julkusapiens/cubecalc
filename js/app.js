@@ -5,6 +5,7 @@ import {Cube3, TRIPLES} from "./cube3.js";
 import {CubeMesh} from "./cubeMesh.js";
 import {Formula, Atom, And, Or, Not} from "./booleanLogic/formula.js";
 import {FormulaParser} from "./booleanLogic/formulaParser.js";
+import {Consensus} from "./consensus.js";
 
 'use strict';
 
@@ -79,9 +80,28 @@ let assignment = { 'x': true, 'y': false, 'z': true };
 console.log(formula.toString());
 console.log(formula.evaluate(assignment));
 console.log(formula.collectAtoms());
-console.log(formula.getDNFProductTerms());
+console.log(formula.getAllTrueAssignments());
 
-let parser = new FormulaParser("x and y and not z");
+let parser = new FormulaParser("x and y or not y and z");
 let f = parser.parse();
+console.log(f);
 console.log(f.toString());
-console.log(f.getDNFProductTerms());
+console.log(f.getDNF());
+console.log(f.getDNF().toString());
+console.log(f.getAllTrueAssignments());
+let allTrueAssignment = f.getAllTrueAssignments();
+console.log(Object.values(allTrueAssignment));
+console.log(Cube3.fromAssignment(allTrueAssignment[0]));
+let con = new Consensus(
+    Cube3.fromAssignment(allTrueAssignment[3]),
+    Cube3.fromAssignment(allTrueAssignment[0]),
+    Cube3.fromAssignment(allTrueAssignment[2]),
+    Cube3.fromAssignment(allTrueAssignment[1])
+);
+
+// let con = new Consensus(
+//     new Cube(null,0,0,null),
+//     new Cube(null,0,1,1),
+//     new Cube(0,1,0,0)
+// );
+con.consensus();
