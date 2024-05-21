@@ -30,6 +30,10 @@ export class Consensus {
         }
     }
 
+    /**
+     * Applies the consensus algorithm on given cubes.
+     * @returns {Array<Object>} consensus table of all treated cubes
+     */
     consensus() {
         let globalPointer = 1;
         let nextNumber = this.#consensusTable.length + 1;
@@ -51,7 +55,7 @@ export class Consensus {
                 }
                 let consensusCube = localCube.getConsensusWith(globalCube);
 
-                // Determine if consensusCube itself is covered:
+                // Determine if consensusCube itself is covered by previous cubes:
                 // let cancelled = this.consensusIsIncludedIn(consensusCube);
                 let cancelled = this.#consensusTable
                         .findIndex(element => element.cancelled === NOT_CANCELED && element.cube.covers(consensusCube))
@@ -75,7 +79,8 @@ export class Consensus {
             }
             globalPointer += 1;
         }
-        console.log(this.#consensusTable);
+
+        return this.#consensusTable;
     }
 
     // consensusIsIncludedIn(consensus) {

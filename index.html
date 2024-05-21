@@ -22,7 +22,27 @@
 </head>
 
 <body>
-  <h1>Cube Calculus</h1>
+
+  <main id="myMain">
+    <div id="preview3d">
+      <div id="canvasSpan">
+        <canvas id="myCanvas"></canvas>
+      </div>
+      <div id="animationControlBar">
+        <button id="rotationToggle">⏸</button>
+      </div>
+    </div>
+    <div id="controls">
+      <form action="#">
+        <label for="formulaInput">\(f=\)</label>
+        <input type="text" id="formulaInput" placeholder="x and y or not y and z" required="required"/>
+        <input type="submit" value="Go!"/>
+      </form>
+      <div id="formulaDNF"></div>
+      <div id="consensusTable"></div>
+      <div id="formulaMinimized"></div>
+    </div>
+  </main>
 
   <script type="importmap">
     {
@@ -33,6 +53,7 @@
    }
   </script>
   <script type="module" src="js/app.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>

@@ -84,6 +84,47 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+body {
+  display: flex;
+  justify-content: center;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 80%;
+}
+
+#preview3d {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+#canvasSpan {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+#myCanvas {
+  aspect-ratio: 1;
+  height: 100%!important;
+  width: 100%!important;
+}
+
+#rotationToggle {
+  align-self: start;
+}
+
+@media screen and (max-width: 1000px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

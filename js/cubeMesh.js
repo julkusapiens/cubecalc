@@ -41,7 +41,6 @@ export class CubeMesh {
      */
     addLabel(cubeTriple) {
         if (!this.#labels.hasOwnProperty(cubeTriple)) {
-            console.log(cubeTriple.toCanvas(cubeTriple, this.#labelFontStyle));
             const textTexture = new THREE.CanvasTexture(cubeTriple.toCanvas(cubeTriple, this.#labelFontStyle));
             const spriteMaterial = new THREE.SpriteMaterial({ map: textTexture });
             const sprite = new THREE.Sprite(spriteMaterial);
