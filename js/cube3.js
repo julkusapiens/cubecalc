@@ -44,7 +44,7 @@ export class Cube3 extends Cube {
     /**
      * Returns a color of the cube based on the structure of the variable term.
      * More 1 = more red, more 0 = more blue.
-     * @returns {string} rgb color string
+     * @returns {Array} rgb color values
      */
     getColor() {
         const nullCount = this.cube.filter(v => v === null).length;
@@ -55,16 +55,7 @@ export class Cube3 extends Cube {
         const blue = Math.round(zeroCount / 3 * 255);
         const white = Math.round(nullCount / 3 * 255);
 
-        return `rgb(${red + white}, ${white}, ${blue + white})`;
-    }
-
-    getContrastColor() {
-        const color = this.getColor();
-        const rgb = color.match(/\d+/g).map(Number);
-
-        const brightness = Math.round(((rgb[0] * 299) + (rgb[1] * 587) + (rgb[2] * 114)) / 1000);
-
-        return brightness > 0 ? 'black' : 'white';
+        return [red + white, white, blue + white];
     }
 
     /**
@@ -101,9 +92,9 @@ export class Cube3 extends Cube {
         textCanvas.width = textSize;
         textCanvas.height = textSize;
 
-        textContext.fillStyle = this.getColor();
+        textContext.fillStyle = `rgb(${this.getColor().join(', ')})`;
         textContext.fillRect(0, textCanvas.width / 5, textCanvas.width, textCanvas.height / 3);
-        textContext.fillStyle = this.getContrastColor();
+        textContext.fillStyle = 'black';
         textContext.font = fontStyle;
         textContext.fillText(textRepresentation, 0 ,170);
 

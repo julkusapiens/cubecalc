@@ -15,7 +15,6 @@ export class Consensus {
     #consensusTable = [];
 
     constructor(...cubes) {
-        console.log(cubes);
         const uniformLength = cubes[0].getLength();
 
         for (let cube of cubes) {

@@ -31,14 +31,14 @@ export class Formula {
      * Returns the name of the operator or the name of the atom.
      * @returns {string} the name of the operator or the name of the atom.
      */
-    getRoot(){}
+    getRoot(){ /* overridden in concrete implementations */ }
 
     /**
      * It returns left operand if any.
      * If there is no left operand it returns NullObject
      * @returns {null|Formula} the left operand if any.
      */
-    getLeft(){}
+    getLeft(){ /* overridden in concrete implementations */ }
 
     /**
      * It returns left operand if any.
@@ -46,14 +46,56 @@ export class Formula {
      * If an operator is unary then it has no right operand.
      * @returns {null|Formula} the left operand if any.
      */
-    getRight(){}
+    getRight(){ /* overridden in concrete implementations */ }
+
+    /**
+     * Determines the truth value of a given assignment recursively.
+     * @param assignment {Object} an object representing a variable assignment (keys = variable names, values = truth values)
+     * @returns {boolean} the truth value of the formula
+     */
+    evaluate(assignment) { /* overridden in concrete implementations */ }
+
+    /**
+     * Returns true if formula is atomic.
+     * @returns {boolean} true if formula is atomic
+     */
+    isAtomic() {
+        return this.getLeft() == null
+            && this.getRight() == null;
+    }
+
+    /**
+     * @returns {Array<Object>}
+     */
+    getAllTrueAssignments() {
+        return generateAssignments(this.collectAtoms()).filter(a => this.evaluate(a));
+    }
+
+    /**
+     * Returns a formula in DNF from a list of cubes.
+     * @param variableNames {Array<string>} variable names for cube components
+     * @param cubes {Cube} list of cubes (product terms) to construct the formula of
+     * @returns {Formula} formula in DNF from a list of cubes
+     */
+    static formulaFromCubes(variableNames, ...cubes) {
+        if (!cubes.every(c => c.getLength() === cubes[0].getLength())) {
+            throw new Error('All cubes must have same number of components.');
+        }
+        let assignments = cubes.map(c => c.toAssignment(variableNames));
+        let productTerms = assignments.map(a => Formula.productTermFromAssignment(a));
+        let result = productTerms[0];
+        for (let i = 1; i < productTerms.length; i++) {
+            result = new Or(result, productTerms[i]);
+        }
+        return result;
+    }
 
     /**
      * Generates a product term from a given assignment.
      * @param assignment {Object} an object representing a variable assignment (keys = variable names, values = boolean)
      * @returns {Formula} product term representing the given assignment
      */
-    productTermFromAssignment(assignment) {
+    static productTermFromAssignment(assignment) {
         return Object.entries(assignment).reduce((productTerm, [variable, value]) => {
             const term = value ? new Atom(variable) : new Not(new Atom(variable));
             return productTerm ? new And(productTerm, term) : term;
@@ -84,7 +126,7 @@ export class Formula {
         let productTerms = new Map();
         for (let assignment of assignments) {
             if (this.evaluate(assignment)) {
-                const term = this.productTermFromAssignment(assignment);
+                const term = Formula.productTermFromAssignment(assignment);
                 productTerms.set(term.toString(), term);
             }
         }
@@ -98,29 +140,6 @@ export class Formula {
         }
         return result;
     }
-
-
-    /**
-     * @returns {Array<Object>}
-     */
-    getAllTrueAssignments() {
-        return generateAssignments(this.collectAtoms()).filter(a => this.evaluate(a));
-    }
-
-    /**
-     * Returns true if formula is atomic.
-     * @returns {boolean} true if formula is atomic
-     */
-    isAtomic() {
-        return this.getLeft() == null
-            && this.getRight() == null;
-    }
-
-    /**
-     * Determines the truth value of a given assignment recursively.
-     * @param assignment {Object} an object representing a variable assignment (keys = variable names, values = truth values)
-     */
-    evaluate(assignment) {}
 
     toString() {
         return `${this.getLeft()} ${this.getRoot()} ${this.getRight()}`;

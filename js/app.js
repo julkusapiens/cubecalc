@@ -9,7 +9,7 @@ import {Consensus} from "./consensus.js";
 import {FORMULA_INPUT, FORMULA_INPUT_FORM, FORMULA_SUBMIT, PREVIEW_3D, ROTATION_TOGGLE} from "./domElements.js";
 import {toggleAnimation, treatFormula} from "./ui.js";
 
-'use strict'
+'use strict';
 
 export const idleSpeed = 0.003;
 const backgroundImagePath = 'img/sky.png';
@@ -18,7 +18,7 @@ const cubeSize = 2.5;
 const minDistance = 0.5;
 const maxDistance = 6;
 const cubeMaterialParameters = {
-    color: 0xffffff,
+    color: 'white',
     wireframe: false,
     transparent: true,
     opacity: 0.5,

@@ -33,6 +33,27 @@ export class Cube {
     }
 
     /**
+     * Constructs an assignment from this cube.
+     * If a component is null, it is not represented in the assignment.
+     * @param variableNames variable names for cube components
+     * @returns {Object} assignment representing this cube
+     */
+    toAssignment(variableNames) {
+        if (variableNames.length !== this.getLength()) {
+            throw new Error('Not enough/ too many variable names.');
+        }
+        return variableNames.reduce((accAssignment, variableName, index) => {
+            if (this.cube[index] === null) {
+                return { ...accAssignment };
+            }
+            return {
+                ...accAssignment,
+                [variableName]: this.cube[index],
+            };
+        }, {});
+    }
+
+    /**
      * Returns the resulting cube after component-wise addition with the given cube.
      * @param otherCube {Cube} cube to be added
      * @returns {Cube} resulting cube after component-wise addition
@@ -118,7 +139,7 @@ export class Cube {
     }
 
     equals(otherCube) {
-        return this.cube.length === otherCube.cube.length
+        return this.cube.length === otherCube.getLength()
             && this.cube.every((value, index) => value === otherCube.cube[index]);
     }
 
