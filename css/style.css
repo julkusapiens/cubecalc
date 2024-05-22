@@ -85,8 +85,10 @@ textarea {
    ========================================================================== */
 
 body {
+  align-items: center;
   display: flex;
   justify-content: center;
+  height: 95vh;
 }
 
 main {
@@ -117,7 +119,22 @@ main {
   align-self: start;
 }
 
-@media screen and (max-width: 1000px) {
+#controls {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+#formulaDNF {
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 650px) {
+  body {
+    align-items: flex-start;
+  }
+
   main {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;

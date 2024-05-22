@@ -72,7 +72,7 @@ export class Consensus {
                 }
 
                 this.#consensusTable.push({
-                    formedBy: [this.#consensusTable[globalPointer].number, this.#consensusTable[localPointer].number],
+                    formedBy: [globalPointer + 1, localPointer + 1],
                     cube: consensusCube,
                     cancelled: cancelled,
                 });

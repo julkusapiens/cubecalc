@@ -6,15 +6,15 @@ import {CubeMesh} from "./cubeMesh.js";
 import {Formula, Atom, And, Or, Not} from "./booleanLogic/formula.js";
 import {FormulaParser} from "./booleanLogic/formulaParser.js";
 import {Consensus} from "./consensus.js";
-import {PREVIEW_3D, ROTATION_TOGGLE} from "./domElements.js";
-import {toggleAnimation} from "./ui.js";
+import {FORMULA_INPUT, FORMULA_INPUT_FORM, FORMULA_SUBMIT, PREVIEW_3D, ROTATION_TOGGLE} from "./domElements.js";
+import {toggleAnimation, treatFormula} from "./ui.js";
 
-'use strict';
+'use strict'
 
+export const idleSpeed = 0.003;
 const backgroundImagePath = 'img/sky.png';
 const canvasSize = 500;
 const cubeSize = 2.5;
-const idleSpeed = 0.003;
 const minDistance = 0.5;
 const maxDistance = 6;
 const cubeMaterialParameters = {
@@ -59,20 +59,21 @@ controls.maxDistance = maxDistance;
 //controls.minPolarAngle = Math.PI / 2;
 //controls.maxPolarAngle = Math.PI / 2;
 
-const cube = new CubeMesh(cubeSize, cubeMaterialParameters, edgeMaterialParameters, labelFontStyle);
-cube.addToScene(scene);
+export const myCube = new CubeMesh(cubeSize, cubeMaterialParameters, edgeMaterialParameters, labelFontStyle);
+myCube.addToScene(scene);
 
 camera.position.z = 5;
 
 function render() {
     resizeCanvas();
-    cube.get().rotation.y += idleSpeed;
+    myCube.get().rotation.y += myCube.getRotationSpeed();
     renderer.render(scene, camera);
     requestAnimationFrame(render);
 }
-render();
 
 window.addEventListener('DOMContentLoaded', () => {
+    render();
+    FORMULA_INPUT_FORM.addEventListener('submit', treatFormula);
     ROTATION_TOGGLE.addEventListener('click', toggleAnimation);
 });
 

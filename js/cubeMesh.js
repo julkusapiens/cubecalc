@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {Cube3} from "./cube3.js";
+import {idleSpeed} from "./app.js";
 
 /**
  * This class wraps a three.js cube mesh and adds functionality for labels.
@@ -8,6 +9,7 @@ export class CubeMesh {
     #cube;
     #cubeSize;
     #labels = {};
+    #rotationSpeed = idleSpeed;
 
     #labelFontStyle;
 
@@ -61,7 +63,24 @@ export class CubeMesh {
             sprite.material.dispose();
             sprite.geometry.dispose();
             this.#cube.remove(sprite);
+            delete this.#labels[cubeTriple];
         }
+    }
+
+    removeAllLabels() {
+        Object.keys(this.#labels).forEach(cubeTriple => this.removeLabel(cubeTriple));
+    }
+
+    toggleRotation() {
+        if (this.#rotationSpeed > 0) {
+            this.#rotationSpeed = 0;
+        } else {
+            this.#rotationSpeed = idleSpeed;
+        }
+    }
+
+    getRotationSpeed() {
+        return this.#rotationSpeed;
     }
 
     get() {
