@@ -162,6 +162,12 @@ main > * {
   overflow-x: auto;
 }
 
+#formulaInputForm {
+  align-items: baseline;
+  display: flex;
+  margin: 0 1em 0 1.5em;
+}
+
 #formulaInputForm, #consensusTableContainer {
   align-self: center;
   justify-self: center;
@@ -176,6 +182,7 @@ main > * {
 
 #formulaInput {
   border: 0;
+  width: 100%;
 }
 
 #formulaSubmitButton {
@@ -196,7 +203,8 @@ main > * {
 
 #formula, #formulaDNF {
   align-self: center;
-  padding: 0 1em 0 1em;
+  margin: auto;
+  width: 80%;
 }
 
 #consensusTableContainer {
