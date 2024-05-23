@@ -21,21 +21,30 @@ export class Cube3 extends Cube {
      */
     static fromAssignment(assignment) {
         const assignmentValues = Object.values(assignment);
+        const mapValue = (v) => {
+            switch (v) {
+                case true: return 1;
+                case false: return 0;
+                default: return null;
+            }
+        };
+
         switch (assignmentValues.length) {
             case 3:
-                return new Cube3(...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+                return new Cube3(...assignmentValues.map(mapValue));
             case 2:
-                return new Cube3(null, ...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+                return new Cube3(null, ...assignmentValues.map(mapValue));
             case 1:
-                return new Cube3(null, null, ...assignmentValues.map(v => v === true ? 1 : v === false ? 0 : null));
+                return new Cube3(null, null, ...assignmentValues.map(mapValue));
             default:
                 return null;
         }
     }
 
+
     getConsensusWith(otherCube) {
         const consensusCube = super.getConsensusWith(otherCube);
-        if (!consensusCube.getLength() === 3) {
+        if (consensusCube.getLength() !== 3) {
             throw new Error('Consensus must match my size (3).');
         }
         return new Cube3(...consensusCube.cube);
@@ -65,12 +74,21 @@ export class Cube3 extends Cube {
      */
     get3DPosition(environmentSize) {
         const size = environmentSize / 2;
+        const getPositionForAxis = (axisValue) => {
+            switch (axisValue) {
+                case 1: return size;
+                case 0: return -size;
+                default: return 0;
+            }
+        };
+
         return [
-            this.cube[0] === null ? 0 : (this.cube[0] === 0 ? -size : size),
-            this.cube[1] === null ? 0 : (this.cube[1] === 0 ? -size : size),
-            this.cube[2] === null ? 0 : (this.cube[2] === 0 ? -size : size)
+            getPositionForAxis(this.cube[0]),
+            getPositionForAxis(this.cube[1]),
+            getPositionForAxis(this.cube[2])
         ];
     }
+
 
     /**
      * Returns a canvas of the string representation of the cube.

@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cube Calculus</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="">
 
@@ -25,21 +26,24 @@
 
   <main id="myMain">
     <div id="preview3d">
-      <div id="canvasSpan">
+      <div id="canvasContainer">
         <canvas id="myCanvas"></canvas>
       </div>
       <div id="animationControlBar">
-        <button id="rotationToggle">⏸</button>
+        <button id="rotationToggle">
+          <span class="material-symbols-outlined">pause</span>
+        </button>
       </div>
     </div>
     <div id="controls">
       <form id="formulaInputForm" action="#">
         <label for="formulaInput">\(f=\)</label>
-        <input type="text" id="formulaInput" placeholder="x and y or not y and z" value="x and y or not y and z" required="required"/>
+        <input type="text" id="formulaInput" placeholder="x and y or not y and z" required="required"/>
         <input type="submit" id="formulaSubmitButton" value="Go!"/>
       </form>
+      <div id="formula"></div>
       <div id="formulaDNF"></div>
-      <div id="consensusTable"></div>
+      <div id="consensusTableContainer"></div>
       <div id="formulaMinimal"></div>
     </div>
   </main>

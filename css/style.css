@@ -11,8 +11,11 @@
    Base styles: opinionated defaults
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 html {
   color: #222;
+  font-family: 'Nunito', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1em;
   line-height: 1.4;
 }
@@ -84,17 +87,37 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+:root {
+  --accent-color: #516b85;
+  --dark-color: #c4d0e2ff;
+  --light-color: #e8ecf3ff;
+  --main-border-radius: 1.5em;
+}
+
 body {
   align-items: center;
+  background-image: url('../img/sky.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   justify-content: center;
-  height: 95vh;
+  height: 97dvh;
 }
 
 main {
+  aspect-ratio: 2/1;
+  background-color: white;
+  border-radius: var(--main-border-radius);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 80%;
+  transition: ease all .5s;
+}
+
+main > * {
+  align-self: stretch;
 }
 
 #preview3d {
@@ -103,10 +126,14 @@ main {
   flex-direction: column;
 }
 
-#canvasSpan {
+#canvasContainer {
+  border-radius: var(--main-border-radius) 0 0 0;
   display: block;
   height: 100%;
+  overflow: hidden;
   width: 100%;
+  /* Thanks to: https://stackoverflow.com/questions/15007903/html5-canvas-with-rounded-corner */
+  -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
 
 #myCanvas {
@@ -116,29 +143,98 @@ main {
 }
 
 #rotationToggle {
-  align-self: start;
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--main-border-radius);
+  color: var(--accent-color);
+  cursor: pointer;
+  margin: 0.5em;
+  padding: 0.2em;
+  transition: background 400ms;
 }
 
 #controls {
   max-width: 100%;
-  display: flex;
-  flex-direction: column;
+  max-height: 100%;
+  display: grid;
+  grid-template-rows: 1.5fr 1fr 1fr 7fr 1.5fr;
+  row-gap: .5em;
   overflow-x: auto;
+}
+
+#formulaInputForm, #consensusTableContainer {
+  align-self: center;
+  justify-self: center;
+}
+
+#formulaInput, #formulaSubmitButton {
+  font-family: inherit;
+  font-size: inherit;
+  margin: .5em;
+  padding: .5em;
+}
+
+#formulaInput {
+  border: 0;
+}
+
+#formulaSubmitButton {
+  background-color: white;
+  border: 0;
+  color: var(--accent-color);
+}
+
+#formulaSubmitButton:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: .13em;
+}
+
+#formulaSubmitButton:active {
+  background-color: var(--dark-color);
+}
+
+#formula, #formulaDNF {
+  align-self: center;
+  padding: 0 1em 0 1em;
+}
+
+#consensusTableContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+#consensusTable {
+  border-collapse: collapse;
+  margin: auto;
+}
+#consensusTable thead {
+  background-color: var(--dark-color);
+}
+#consensusTable tbody {
+  background-color: var(--light-color);
+}
+#consensusTable td, #consensusTable th {
+  padding: .1em .5em .1em .5em;
+  text-align: center;
+}
+
+#consensusTable td:last-child {
+  text-align: left;
+}
+#consensusTable tbody tr:hover {
+  background-color: rgb(225, 227, 239);
 }
 
 #formulaDNF {
   overflow-x: auto;
 }
 
-@media screen and (max-width: 650px) {
-  body {
-    align-items: flex-start;
-  }
-
-  main {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-  }
+#formulaMinimal {
+  color: var(--accent-color);
+  font-size: 1.2em;
 }
 
 
@@ -225,8 +321,27 @@ main {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
+@media only screen and (min-width: 1200px) {
+  main { width: 60%; }
+}
+
+@media only screen and (max-width: 720px) {
   /* Style adjustments for viewports that meet the condition */
+  body {
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  main {
+    aspect-ratio: unset;
+    margin: 3em 0 3em 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  #canvasContainer {
+    border-radius: var(--main-border-radius) var(--main-border-radius) 0 0;
+  }
 }
 
 @media print,

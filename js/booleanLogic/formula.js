@@ -42,7 +42,7 @@ export class Formula {
 
     /**
      * It returns left operand if any.
-     * If there is no left operand it returns NullObject.
+     * If there is no left operand it returns null.
      * If an operator is unary then it has no right operand.
      * @returns {null|Formula} the left operand if any.
      */
@@ -65,7 +65,8 @@ export class Formula {
     }
 
     /**
-     * @returns {Array<Object>}
+     * Returns all assignments that evaluate to true.
+     * @returns {Array<Object>} all assignments that evaluate to true
      */
     getAllTrueAssignments() {
         return generateAssignments(this.collectAtoms()).filter(a => this.evaluate(a));
@@ -146,6 +147,9 @@ export class Formula {
     }
 }
 
+/**
+ * This class represents a logical literal.
+ */
 export class Atom extends Formula {
     #variable = "";
 
@@ -175,16 +179,12 @@ export class Atom extends Formula {
     }
 }
 
-export class Not extends Formula {
+class UnaryFormula extends Formula {
     #rightFormula;
 
     constructor(rightFormula) {
         super();
         this.#rightFormula = rightFormula;
-    }
-
-    getRoot() {
-        return FORMULA_SYMBOLS.not;
     }
 
     getLeft() {
@@ -194,13 +194,9 @@ export class Not extends Formula {
     getRight() {
         return this.#rightFormula;
     }
-
-    evaluate(assignment) {
-        return !this.getRight().evaluate(assignment);
-    }
 }
 
-export class Or extends Formula {
+class BinaryFormula extends Formula {
     #leftFormula;
     #rightFormula;
 
@@ -210,16 +206,34 @@ export class Or extends Formula {
         this.#rightFormula = rightFormula;
     }
 
-    getRoot() {
-        return FORMULA_SYMBOLS.or;
-    }
-
     getLeft() {
         return this.#leftFormula;
     }
 
     getRight() {
         return this.#rightFormula;
+    }
+}
+
+/**
+ * This class represents the logical NOT.
+ */
+export class Not extends UnaryFormula {
+    getRoot() {
+        return FORMULA_SYMBOLS.not;
+    }
+
+    evaluate(assignment) {
+        return !this.getRight().evaluate(assignment);
+    }
+}
+
+/**
+ * This class represents the logical OR.
+ */
+export class Or extends BinaryFormula {
+    getRoot() {
+        return FORMULA_SYMBOLS.or;
     }
 
     evaluate(assignment) {
@@ -227,26 +241,12 @@ export class Or extends Formula {
     }
 }
 
-export class And extends Formula {
-    #leftFormula;
-    #rightFormula;
-
-    constructor(leftFormula, rightFormula) {
-        super();
-        this.#leftFormula = leftFormula;
-        this.#rightFormula = rightFormula;
-    }
-
+/**
+ * This class represents the logical AND.
+ */
+export class And extends BinaryFormula {
     getRoot() {
         return FORMULA_SYMBOLS.and;
-    }
-
-    getLeft() {
-        return this.#leftFormula;
-    }
-
-    getRight() {
-        return this.#rightFormula;
     }
 
     evaluate(assignment) {

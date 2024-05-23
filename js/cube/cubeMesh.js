@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {Cube3} from "./cube3.js";
-import {idleSpeed} from "./app.js";
+import {idleSpeed} from "../app.js";
 
 /**
  * This class wraps a three.js cube mesh and adds functionality for labels.
@@ -18,9 +18,17 @@ export class CubeMesh {
         new Cube3(null,null,0)
     ];
     #rotationSpeed = idleSpeed;
+    // default face color in HSV speichern
 
     #labelFontStyle;
 
+    /**
+     * Constructs a new cube mesh.
+     * @param size {number} side length of the cube
+     * @param cubeMaterialParams {Object} material of the non-colored cube faces
+     * @param edgeMaterialParams {Object} material of the edges
+     * @param labelFontStyle {string} font style of the labels
+     */
     constructor(size, cubeMaterialParams, edgeMaterialParams, labelFontStyle) {
         this.#cubeSize = size;
         this.#labelFontStyle  = labelFontStyle;
@@ -43,13 +51,6 @@ export class CubeMesh {
         const cubeEdges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
 
         this.#cube.add(cubeEdges);
-
-        // this.#cube.material[0].color.setHSL(0, 1, 0.5); // red
-        // this.#cube.material[1].color.setHSL(0.083, 1, 0.5); // orange
-        // this.#cube.material[2].color.setHSL(0.166, 1, 0.5); // yellow
-        // this.#cube.material[3].color.setHSL(0.277, 1, 0.5); // green
-        // this.#cube.material[4].color.setHSL(0.666, 1, 0.5); // blue
-        // this.#cube.material[5].color.setHSL(0.833, 1, 0.5); // purple
     }
 
     /**
@@ -78,7 +79,6 @@ export class CubeMesh {
 
             let faceIndex = this.#faceNumberToCube.findIndex(c => c.equals(cube3));
             if (faceIndex >= 0) {
-                console.log("faceIndex: " + faceIndex);
                 this.#cube.material[faceIndex].color.setHSL(...rgbToHsl(...cube3.getColor()));
             }
 
@@ -161,22 +161,22 @@ export class CubeMesh {
  * @param   {number}  r       The red color value
  * @param   {number}  g       The green color value
  * @param   {number}  b       The blue color value
- * @return  {Array}           The HSL representation
+ * @returns {Array<number>}           The HSL representation
  */
 function rgbToHsl(r, g, b) {
     (r /= 255); (g /= 255); (b /= 255);
-    const vmax = Math.max(r, g, b), vmin = Math.min(r, g, b);
-    let h, s, l = (vmax + vmin) / 2;
+    const vMax = Math.max(r, g, b), vMin = Math.min(r, g, b);
+    let h, s, l = (vMax + vMin) / 2;
 
-    if (vmax === vmin) {
+    if (vMax === vMin) {
         return [0, 0, l]; // achromatic
     }
 
-    const d = vmax - vmin;
-    s = l > 0.5 ? d / (2 - vmax - vmin) : d / (vmax + vmin);
-    if (vmax === r) h = (g - b) / d + (g < b ? 6 : 0);
-    if (vmax === g) h = (b - r) / d + 2;
-    if (vmax === b) h = (r - g) / d + 4;
+    const d = vMax - vMin;
+    s = l > 0.5 ? d / (2 - vMax - vMin) : d / (vMax + vMin);
+    if (vMax === r) h = (g - b) / d + (g < b ? 6 : 0);
+    if (vMax === g) h = (b - r) / d + 2;
+    if (vMax === b) h = (r - g) / d + 4;
     h /= 6;
 
     return [h, s, l];
