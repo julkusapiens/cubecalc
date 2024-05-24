@@ -3,6 +3,7 @@
 ## About
 This webapp implements a rudimentary version of the consensus algorithm as discussed in the lecture
 "Digitaltechnik und Entwurfsverfahren" at [KIT](https://www.kit.edu/).
+
 The goal is to find a mostly minimal version of a given logical formula. After having been transformed to 
 its [DNF](https://en.wikipedia.org/wiki/Disjunctive_normal_form), the product terms (AND terms) are represented as cubes (n-tuples)
 in the cube calculus. Via the consensus algorithm, one can find overlaps of these cubes that eliminate variables.
